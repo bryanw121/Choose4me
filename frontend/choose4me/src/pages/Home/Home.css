@@ -1,0 +1,12 @@
+.container {
+  margin: 3rem;
+}
+div {
+  margin: 2rem;
+}
+.errorMessage {
+  text-align: center;
+  color: red;
+  width: 40%;
+  margin: 0 auto auto;
+}

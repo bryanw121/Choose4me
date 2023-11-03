@@ -1,15 +1,19 @@
 import React from "react";
-import logo from "./logo.svg";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home/Home";
+import Choose from "./pages/Choose/Choose";
+import Adventures from "./pages/Adventures/Adventures";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <Home></Home>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route index path="/" element={<Home />} />
+        <Route path="/choose" element={<Choose />} />
+        <Route path="/adventures" element={<Adventures />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
