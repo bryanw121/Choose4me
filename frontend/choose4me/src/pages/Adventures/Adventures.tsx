@@ -1,10 +1,11 @@
-import React, { FC } from "react";
-import { Button, Table } from "@mui/material";
+import { FC } from "react";
+import { Button } from "@mui/material";
 import Header from "../../shared/Header/Header";
 import AdventureBreadcrumbs from "./components/AdventureBreadcrumbs/AdventureBreadcrumbs";
+import AdventureTable2 from "./components/AdventureTable/AdventureTable2";
 import AdventureTable from "./components/AdventureTable/AdventureTable";
 import AddAdventures from "./components/AddAdventures/AddAdventures";
-import "./Adventures.css"
+import "./Adventures.css";
 
 const Adventures: FC = () => {
   return (
@@ -18,8 +19,9 @@ const Adventures: FC = () => {
         <h2>Adventures</h2>
         <AddAdventures />
         <br></br>
-        <h3>Planned Adventures</h3>
-        <AdventureTable />
+        <div className="adventure-table">
+          <AdventureTable />
+        </div>
       </div>
     </>
   );
