@@ -17,7 +17,6 @@ const rows = mockRows.map((row) => createData(row[0], row[1], row[2]));
 
 export default function AdventureTable() {
   const [selected, setSelected] = useState<number[]>([]);
-  const [checked, setChecked] = useState(false);
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
     const selectedIndex = selected.indexOf(id);
@@ -47,7 +46,7 @@ export default function AdventureTable() {
   };
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 400 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell padding="checkbox">

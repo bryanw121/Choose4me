@@ -15,7 +15,7 @@ const Home: FC<HomeProps> = () => {
       <div className="container">
         <h3>Can't make a decision?</h3>
         <p>Click the button below so you don't have to</p>
-        <Button variant="outlined" href="/choose">
+        <Button variant="outlined" href="/choose" disabled={emptyAdventures}>
           Choose4me
         </Button>
       </div>
