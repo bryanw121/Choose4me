@@ -6,8 +6,14 @@ import Header from "../../shared/Header/Header";
 
 const Home: FC<HomeProps> = () => {
   const [emptyAdventures, setEmptyAdventures] = useState(false);
+  const fetchData = async () => {
+    await fetch("/get-adventures").then((data) => {
+      console.log(data.json());
+    });
+  };
   useEffect(() => {
     //TODO: query db to see if there are currently any entries
+    fetchData()
   });
   return (
     <>
