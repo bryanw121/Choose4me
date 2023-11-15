@@ -31,6 +31,7 @@ app = Flask(__name__)
 app.config[
     "SQLALCHEMY_DATABASE_URI"
 ] = f"mysql+mysqlconnector://{os.getenv('user')}:{os.getenv('password')}@{HOST}:{PORT}/{DB_NAME}"
+engine = create_engine(app.config["SQLALCHEMY_DATABASE_URI"], echo=True)
 db.init_app(app)
 
 with app.app_context():
@@ -39,20 +40,22 @@ with app.app_context():
 
 @app.route("/get-adventures")
 def get_adventures():
-    adventures = db.session.execute(text("select * from main"))
+    adventures = db.session.execute(db.select(Main)).scalars()
+    current_adventures = []
     for row in adventures:
-        print(row.date)
-    return {"response": [row.id, row.name, row.date]}
+        current_adventures.append((row.id, row.name, row.date))
+    return {"response": current_adventures}
 
 
 @app.route("/add-adventures/<adventure_name>", methods=["GET", "POST"])
 def add_adventure(adventure_name):
-
     today = date.today()
-    try: 
-        new_adventure = Main(name=adventure_name, date=today)
-        db.session.add(new_adventure)
-        db.session.commit()
+    try:
+        stmt = insert(Main).values(name=adventure_name, date=today)
+        with engine.connect() as conn:
+            result = conn.execute(stmt)
+            conn.commit()
+
         return {"status": 200}
     except Exception as error:
         return {"status": str(error)}
@@ -61,9 +64,9 @@ def add_adventure(adventure_name):
 @app.route("/edit-adventures/<adventure_name>", methods=["GET", "POST"])
 def edit_adventure(adventure_name):
     if request.method == "POST":
-      print(adventure_name)
-      adventures = db.session.execute(text("select * from main"))
-      return f"{adventure_name}"
+        print(adventure_name)
+        adventures = db.session.execute(db.select(Main))
+        return f"{adventure_name}"
     adventure = db.get_or_404(Main, adventure_name)
     return adventure
 
