@@ -1,7 +1,16 @@
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import DATETIME, create_engine, text, select, Integer, String, insert
+from sqlalchemy import (
+    DATETIME,
+    create_engine,
+    delete,
+    text,
+    select,
+    Integer,
+    String,
+    insert,
+)
 
 import os
 from datetime import date
@@ -60,14 +69,16 @@ def add_adventure(adventure_name):
         return {"status": str(error)}
 
 
-@app.route("/edit-adventures/<adventure_name>", methods=["GET", "POST"])
-def edit_adventure(adventure_name):
-    if request.method == "POST":
-        print(adventure_name)
-        adventures = db.session.execute(db.select(Main))
-        return f"{adventure_name}"
-    adventure = db.get_or_404(Main, adventure_name)
-    return adventure
+@app.route("/remove-adventures/<int:id>", methods=["GET", "POST"])
+def remove_adventure(id):
+    try:
+        delete_stmt = delete(Main).where(Main.id == id)
+        with engine.connect() as conn:
+            result = conn.execute(delete_stmt)
+            conn.commit()
+        return {"status": 200}
+    except Exception as error:
+        return {"status": str(error)}
 
 
 if __name__ == "__main__":
