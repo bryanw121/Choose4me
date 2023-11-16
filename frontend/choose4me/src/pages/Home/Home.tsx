@@ -6,15 +6,24 @@ import Header from "../../shared/Header/Header";
 
 const Home: FC<HomeProps> = () => {
   const [emptyAdventures, setEmptyAdventures] = useState(false);
-  const fetchData = async () => {
-    await fetch("/get-adventures").then((data) => {
-      console.log(data.json());
-    });
-  };
+  const [currentAdventures, setCurrentAdventures] = useState([{}]);
   useEffect(() => {
-    //TODO: query db to see if there are currently any entries
-    fetchData()
-  });
+    const fetchData = async () => {
+      await fetch("/get-adventures")
+        .then((data) => data.json())
+        .then((data) => {
+          setCurrentAdventures(data["response"]);
+        })
+        .then(() => {
+          if (currentAdventures.length === 0) {
+            setEmptyAdventures(true);
+          } else {
+            setEmptyAdventures(false);
+          }
+        });
+    };
+    fetchData().catch(console.error);
+  }, [currentAdventures]);
   return (
     <>
       <Header />

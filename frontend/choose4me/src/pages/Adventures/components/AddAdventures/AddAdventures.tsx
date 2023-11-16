@@ -2,14 +2,24 @@ import React, { FC, useState } from "react";
 import { Button, TextField } from "@mui/material";
 import "./AddAdventures.css";
 
-const AddAdventures: FC = () => {
+const AddAdventures: FC = ({
+  //@ts-ignore
+  currentAdventures,
+  //@ts-ignore
+  setCurrentAdventures,
+}) => {
   const [input, setInput] = useState("");
   const handleClick = () => {
-    console.log(input);
+    const addAdventure = async () => {
+      await fetch("/add-adventure/" + input).then((data) => {
+        console.log(data.json());
+      });
+    };
+    addAdventure();
   };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value);
-    console.log(event.target.value)
+    console.log(event.target.value);
   };
   return (
     <>

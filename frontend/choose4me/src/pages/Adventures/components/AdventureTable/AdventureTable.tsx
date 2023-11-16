@@ -9,13 +9,17 @@ import { useState } from "react";
 import { Checkbox } from "@mui/material";
 import { mockRows } from "../../../../constants/constants";
 
-function createData(id: number, name: string, dateAdded: string) {
-  return { id, name, dateAdded };
-}
-//@ts-ignore
-const rows = mockRows.map((row) => createData(row[0], row[1], row[2]));
+// function createData(id: number, name: string, dateAdded: string) {
+//   return { id, name, dateAdded };
+// }
 
-export default function AdventureTable() {
+export default function AdventureTable({
+  //@ts-ignore
+  currentAdventures,
+  //@ts-ignore
+  setCurrentAdventures,
+}) {
+  const rows = currentAdventures;
   const [selected, setSelected] = useState<number[]>([]);
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
@@ -36,28 +40,23 @@ export default function AdventureTable() {
     }
     setSelected(newSelected);
   };
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
+  function convertDate(str: string) {
+    var date = new Date(str),
+      month = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [date.getFullYear(), month, day].join("/");
+  }
+  const handleRemove = (event: React.MouseEvent<unknown>) => {
+    //TODO: add remove button
+    console.log(currentAdventures);
   };
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 400 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell padding="checkbox">
-              <Checkbox
-                color="primary"
-                inputProps={{
-                  "aria-label": "select all adventures",
-                }}
-                onChange={handleSelectAllClick}
-              />
-            </TableCell>
+            <TableCell padding="checkbox"></TableCell>
             <TableCell>
               <h2>Adventure name</h2>
             </TableCell>
@@ -67,34 +66,37 @@ export default function AdventureTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, index) => {
-            const isItemSelected = isSelected(row.id);
-            const labelId = `adventures-${index}`;
-            return (
-              <TableRow
-                key={row.name}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                selected={isItemSelected}
-              >
-                <TableCell>
-                  <Checkbox
-                    color="primary"
-                    checked={isItemSelected}
-                    inputProps={{
-                      "aria-labelledby": labelId,
-                    }}
-                    onClick={(event) => {
-                      handleClick(event, row.id);
-                    }}
-                  />
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{row.dateAdded}</TableCell>
-              </TableRow>
-            );
-          })}
+          {
+            //@ts-ignore
+            rows.map((row, index) => {
+              const isItemSelected = isSelected(row.id);
+              const labelId = `adventures-${index}`;
+              return (
+                <TableRow
+                  key={row.name}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  selected={isItemSelected}
+                >
+                  <TableCell>
+                    <Checkbox
+                      color="primary"
+                      checked={isItemSelected}
+                      inputProps={{
+                        "aria-labelledby": labelId,
+                      }}
+                      onClick={(event) => {
+                        handleClick(event, row.id);
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="right">{convertDate(row.date)}</TableCell>
+                </TableRow>
+              );
+            })
+          }
         </TableBody>
       </Table>
     </TableContainer>

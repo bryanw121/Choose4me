@@ -51,11 +51,11 @@ def get_adventures():
     adventures = db.session.execute(db.select(Main)).scalars()
     current_adventures = []
     for row in adventures:
-        current_adventures.append((row.id, row.name, row.date))
+        current_adventures.append({"id": row.id, "name": row.name, "date": row.date})
     return {"response": current_adventures}
 
 
-@app.route("/add-adventures/<adventure_name>", methods=["GET", "POST"])
+@app.route("/add-adventure/<adventure_name>", methods=["GET", "POST"])
 def add_adventure(adventure_name):
     today = date.today()
     try:
@@ -69,7 +69,7 @@ def add_adventure(adventure_name):
         return {"status": str(error)}
 
 
-@app.route("/remove-adventures/<int:id>", methods=["GET", "POST"])
+@app.route("/remove-adventure/<int:id>", methods=["GET", "POST"])
 def remove_adventure(id):
     try:
         delete_stmt = delete(Main).where(Main.id == id)
