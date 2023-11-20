@@ -1,0 +1,8 @@
+.left-cell {
+  justify-content: center;
+  text-align: center;
+  width: 10%;
+}
+.right-cell {
+  padding-right: 3rem;
+}

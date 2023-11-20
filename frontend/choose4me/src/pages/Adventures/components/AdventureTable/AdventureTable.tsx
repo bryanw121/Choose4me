@@ -5,13 +5,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { useState } from "react";
-import { Checkbox } from "@mui/material";
-import { mockRows } from "../../../../constants/constants";
-
-// function createData(id: number, name: string, dateAdded: string) {
-//   return { id, name, dateAdded };
-// }
+import { useEffect, useState } from "react";
+import { Checkbox, IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import "./AdventureTable.css";
 
 export default function AdventureTable({
   //@ts-ignore
@@ -47,8 +44,20 @@ export default function AdventureTable({
     return [date.getFullYear(), month, day].join("/");
   }
   const handleRemove = (event: React.MouseEvent<unknown>) => {
-    //TODO: add remove button
-    console.log(currentAdventures);
+    selected.forEach(async (element) => {
+      console.log(element);
+      await fetch("/remove-adventure/" + element);
+      const fetchData = async () => {
+        await fetch("/get-adventures")
+          .then((data) => data.json())
+          .then((data) => {
+            setCurrentAdventures(data["response"]);
+            console.log(data["response"]);
+          });
+      };
+      fetchData().catch(console.error);
+      setSelected([]);
+    });
   };
 
   return (
@@ -56,11 +65,19 @@ export default function AdventureTable({
       <Table sx={{ minWidth: 400 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell padding="checkbox"></TableCell>
+            <TableCell className="left-cell">
+              <IconButton
+                disabled={selected ? false : true}
+                aria-label="delete"
+                onClick={handleRemove}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </TableCell>
             <TableCell>
               <h2>Adventure name</h2>
             </TableCell>
-            <TableCell align="right">
+            <TableCell align="right" className="right-cell">
               <h2>Date added</h2>
             </TableCell>
           </TableRow>
@@ -77,7 +94,7 @@ export default function AdventureTable({
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   selected={isItemSelected}
                 >
-                  <TableCell>
+                  <TableCell className="left-cell">
                     <Checkbox
                       color="primary"
                       checked={isItemSelected}
@@ -92,7 +109,9 @@ export default function AdventureTable({
                   <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell>
-                  <TableCell align="right">{convertDate(row.date)}</TableCell>
+                  <TableCell align="right" className="right-cell">
+                    {convertDate(row.date)}
+                  </TableCell>
                 </TableRow>
               );
             })
