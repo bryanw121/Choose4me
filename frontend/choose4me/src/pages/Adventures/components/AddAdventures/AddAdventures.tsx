@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, KeyboardEvent } from "react";
 import { Button, TextField } from "@mui/material";
 import "./AddAdventures.css";
 
@@ -24,6 +24,11 @@ const AddAdventures: FC = ({
     addAdventure();
     setInput("");
   };
+  const handleKeyDown = (event: any) => {
+    if (event.code === "Enter" || event.code === "NumpadEnter") {
+      handleClick();
+    }
+  };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value);
   };
@@ -37,6 +42,7 @@ const AddAdventures: FC = ({
           placeholder="Add an adventure!"
           value={input}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
         ></TextField>
       </div>
       <div>
