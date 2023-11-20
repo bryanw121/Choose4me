@@ -1,4 +1,4 @@
-import { Breadcrumbs, Link, Typography } from "@mui/material";
+import { Breadcrumbs, Link } from "@mui/material";
 import { FC } from "react";
 
 const ChooseBreadcrumbs: FC = () => {

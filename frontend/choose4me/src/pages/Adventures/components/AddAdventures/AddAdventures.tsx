@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { Button, TextField } from "@mui/material";
 import "./AddAdventures.css";
 
@@ -11,8 +11,14 @@ const AddAdventures: FC = ({
   const [input, setInput] = useState("");
   const handleClick = () => {
     const addAdventure = async () => {
-      await fetch("/add-adventure/" + input).then((data) => {
+      await fetch("/add-adventure/" + input).then(async (data) => {
         console.log(data.json());
+        await fetch("/get-adventures")
+          .then((data) => data.json())
+          .then((data) => {
+            setCurrentAdventures(data["response"]);
+            console.log(data["response"]);
+          });
       });
     };
     addAdventure();
@@ -21,17 +27,7 @@ const AddAdventures: FC = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value);
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetch("/get-adventures")
-        .then((data) => data.json())
-        .then((data) => {
-          setCurrentAdventures(data["response"]);
-          console.log(data["response"]);
-        });
-    };
-    fetchData().catch(console.error);
-  }, [currentAdventures]);
+
   return (
     <>
       <div>
