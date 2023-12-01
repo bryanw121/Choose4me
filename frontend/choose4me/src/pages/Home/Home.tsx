@@ -29,7 +29,8 @@ const Home: FC<HomeProps> = () => {
       <Header />
       <div className="container">
         <h3>Can't make a decision?</h3>
-        <p>Click the button below so you don't have to</p>
+        <p>Click the button below so you don't have to.</p>
+        <p>Choose4me randomly chooses an adventure for you from the ones you input.</p>
         <Button variant="outlined" href="/choose" disabled={emptyAdventures}>
           Choose4me
         </Button>

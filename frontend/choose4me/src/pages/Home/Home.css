@@ -1,8 +1,10 @@
 .container {
   margin: 3rem;
+  text-align: center;
 }
 div {
   margin: 2rem;
+  text-align: center;
 }
 .errorMessage {
   text-align: center;
