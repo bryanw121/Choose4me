@@ -7,7 +7,7 @@ const AdventureBreadcrumbs: FC = () => {
       <Link underline="hover" color="inherit" href="/">
         Home
       </Link>
-      <Link underline="hover" color="inherit" href="/choose">
+      <Link underline="hover" color="inherit" href="/adventures">
         Adventures
       </Link>
     </Breadcrumbs>
